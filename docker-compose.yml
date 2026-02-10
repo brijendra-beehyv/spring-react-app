@@ -1,0 +1,32 @@
+services:
+    postgres:
+        container_name: postgres
+        image: postgres:14.1-alpine
+        restart: always
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        ports:
+            - 5432:5432
+        volumes:
+           - postgres:/var/lib/postgresql/data
+    
+    backend:
+        depends_on:
+            - postgres
+        container_name: spring-app
+        image: spring-backend:latest
+        ports:
+            - 9001:9001
+    
+    frontend:
+        depends_on:
+            - postgres
+            - backend
+        container_name: frontend-app
+        image: react-frontend:v9
+        ports:
+            - 3000:80
+
+volumes:
+   postgres:

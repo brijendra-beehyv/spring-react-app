@@ -1,0 +1,20 @@
+name: Buid and Push docker image
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-n-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout to repo
+        uses: actions/checkout@v4
+      
+      - name: Build frontend
+        run: docker build -t react-frontend:v9 -f Dockerfile.frontend .
+
+      - name: Build backend
+        run: docker build -t react-frontend:v9 -f Dockerfile.backend .
