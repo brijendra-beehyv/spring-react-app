@@ -24,7 +24,7 @@ services:
             - postgres
             - backend
         container_name: frontend-app
-        image: react-frontend:v9
+        image: react-frontend:latest
         ports:
             - 3000:80
 
