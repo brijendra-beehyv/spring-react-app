@@ -10,33 +10,36 @@ services:
             - 5432:5432
         volumes:
            - postgres:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+            start_period: 10s
     
     backend:
         depends_on:
-            - postgres
+            postgres:
+                condition: service_healthy
         container_name: spring-app
         image: spring-backend:latest
         ports:
             - 9001:9001
         healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:9001/v1"]
-            interval: 30s
+            test: ["CMD", "curl", "localhost:9001"]
+            interval: 10s
             timeout: 10s
             retries: 3
+            start_period: 20s
 
     frontend:
         depends_on:
-            - postgres
-            - backend
+            backend:
+                condition: service_healthy
         container_name: frontend-app
         image: react-frontend:latest
         ports:
             - 3000:80
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:3000/"]
-            interval: 30s
-            timeout: 10s
-            retries: 3
 
 volumes:
     postgres:
