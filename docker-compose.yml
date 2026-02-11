@@ -39,5 +39,5 @@ services:
             retries: 3
 
 volumes:
-   postgres:
-   backend-logs:
+    postgres:
+        name: postgres-volume
